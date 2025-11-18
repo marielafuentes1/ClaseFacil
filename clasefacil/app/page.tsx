@@ -34,9 +34,13 @@ export default function AsistenciaPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const saved = localStorage.getItem("attendance_records");
-    if (saved) {
-      setSavedAttendance(JSON.parse(saved));
+    try {
+      const saved = localStorage.getItem("attendance_records");
+      if (saved) {
+        setSavedAttendance(JSON.parse(saved));
+      }
+    } catch (error) {
+      console.log("[v0] Error loading saved attendance:", error);
     }
   }, []);
 
@@ -79,20 +83,6 @@ export default function AsistenciaPage() {
     setIsSaving(true);
 
     try {
-      // Save to API
-      const response = await fetch("/api/asistencia", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fecha: selectedDate,
-          asistencias: students,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Error al guardar asistencia");
-      }
-
       // Save to localStorage
       const newRecord = { fecha: selectedDate, asistencias: students };
       const updatedRecords = savedAttendance.filter(
