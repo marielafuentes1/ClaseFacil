@@ -120,9 +120,9 @@ export default function AsistenciaPage() {
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/">
-              <Button variant="outline" size="icon">
+              <button className="p-2 border rounded">
                 <ArrowLeft className="h-4 w-4" />
-              </Button>
+              </button>
             </Link>
             <h1 className="text-3xl font-bold text-gray-800">
               Tomar Asistencia
@@ -264,12 +264,11 @@ export default function AsistenciaPage() {
                           {tardes}
                         </p>
                       </div>
-                      <Button
-                        variant="outline"
-                        onClick={() => setSelectedDate(record.fecha)}
-                      >
-                        Ver detalles
-                      </Button>
+                      <Link href="/">
+                        <button className="p-2 border rounded">
+                          <ArrowLeft className="h-4 w-4" />
+                        </button>
+                      </Link>
                     </div>
                   );
                 })}

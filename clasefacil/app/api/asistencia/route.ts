@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+/*import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
 // =============================
 export async function GET(request: NextRequest) {
     try {
-        const cookieStore = cookies();
+        const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
 
         if (!userCookie) {
@@ -122,3 +122,5 @@ export async function GET(request: NextRequest) {
         );
     }
 }
+
+/*

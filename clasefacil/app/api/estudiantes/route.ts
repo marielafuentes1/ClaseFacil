@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server"
+/*import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { cookies } from "next/headers"
 
@@ -65,3 +65,4 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Error interno" }, { status: 500 })
     }
 }
+/*
