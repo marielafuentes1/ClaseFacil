@@ -19,6 +19,7 @@ interface SavedAttendance {
   asistencias: Student[]
 }
 
+
 const CLASSES = ["1A", "1B", "2A", "2B", "3A", "3B"]
 
 export default function AsistenciaPage() {
