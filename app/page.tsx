@@ -77,16 +77,17 @@ export default function AsistenciaPage() {
     },
   });
 
-  const [selectedClass, setSelectedClass] = useState("1A");
+  const [selectedClass, setSelectedClass] = useState<"1ºA" | "1ºB" | "2ºA">("1ºA");
 
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
   async function obtenerInformacionDeEstudiante() {
     const records = await pb.collection("estudiantes").getFullList({
-      filter: `grade = "${selectedClass}"`,
-      sort: "firstName",
+      filter: `grado = "${selectedClass}"`,
+      sort: "nombre",
     });
+    console.table(records)
     return records;
   }
   const query = useQuery({
@@ -241,7 +242,7 @@ export default function AsistenciaPage() {
                       {new Date(selectedDate).toLocaleDateString("es-ES")}
                     </td>
                     <td className="border-r-2 border-gray-800 px-6 py-4 text-gray-800">
-                      {student.name}
+                      {student.nombre}
                     </td>
                     <td className="border-r-2 border-gray-800 px-6 py-4">
                       <select
