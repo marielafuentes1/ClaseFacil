@@ -38,6 +38,8 @@ export default function AsistenciaPage() {
     const data = {
       estado: estadoPorActualizar,
     };
+    const record = await pb.collection("asistencias").update(id, data);
+    return record;
   }
 
   async function actualizarObservacion({
@@ -65,7 +67,7 @@ export default function AsistenciaPage() {
     mutationFn: actualizarEstado,
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["asistencia"] });
+      queryClient.invalidateQueries({ queryKey: ["asistencias"] });
     },
   });
 
@@ -77,7 +79,9 @@ export default function AsistenciaPage() {
     },
   });
 
-  const [selectedClass, setSelectedClass] = useState<"1ºA" | "1ºB" | "2ºA">("1ºA");
+  const [selectedClass, setSelectedClass] = useState<"1ºA" | "1ºB" | "2ºA">(
+    "1ºA"
+  );
 
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -87,7 +91,7 @@ export default function AsistenciaPage() {
       filter: `grado = "${selectedClass}"`,
       sort: "nombre",
     });
-    console.table(records)
+    console.table(records);
     return records;
   }
   const query = useQuery({
@@ -258,9 +262,9 @@ export default function AsistenciaPage() {
                         }
                         className="rounded-lg border border-gray-800 bg-white px-3 py-1 text-gray-800"
                       >
-                        <option value="Presente">Presente</option>
-                        <option value="Ausente">Ausente</option>
-                        <option value="Tarde">Tarde</option>
+                        <option value="presente">Presente</option>
+                        <option value="ausente">Ausente</option>
+                        <option value="tarde">Tarde</option>
                       </select>
                     </td>
                     <td className="px-6 py-4">
