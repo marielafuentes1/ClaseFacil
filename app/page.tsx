@@ -41,7 +41,7 @@ export default function AsistenciaPage() {
     const record = await pb.collection("asistencias").update(id, data);
     return record;
   }
-
+  
   async function actualizarObservacion({
     id, //definicion de parametro
     observacionPorActualizar,
@@ -54,6 +54,7 @@ export default function AsistenciaPage() {
       observaciones: observacionPorActualizar,
     };
   }
+
   //  function name(params:type) {
 
   //   }
@@ -75,9 +76,10 @@ export default function AsistenciaPage() {
     mutationFn: actualizarObservacion,
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["asistencia"] });
+      queryClient.invalidateQueries({ queryKey: ["asistencias"] });
     },
   });
+
 
   const [selectedClass, setSelectedClass] = useState<"1ºA" | "1ºB" | "2ºA">(
     "1ºA"
