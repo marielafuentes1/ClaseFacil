@@ -122,10 +122,10 @@ export default function AsistenciaPage() {
         </div>
 
         {/* Attendance Table */}
-        <div className="overflow-hidden rounded-2xl border-2 border-gray-800 bg-green-100">
+        <div className="overflow-hidden rounded-2xl border-2 border-gray-800 bg-red-200">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="border-b-2 border-gray-800 bg-green-200">
+              <thead className="border-b-2 border-gray-800 bg-red-300">
                 <tr>
                   <th className="border-r-2 border-gray-800 px-6 py-4 text-left font-semibold text-gray-800">
                     Fecha
