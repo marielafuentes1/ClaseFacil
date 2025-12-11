@@ -23,8 +23,22 @@ async function actualizarCalificacion({
 
   // Crear un nuevo registro en la colección "calificaciones"
   const record = await pb.collection('calificaciones').update(id, data);
-    return record;
-  }
+  return record;
+}
+async function actualizarObservacion({
+  id,
+  observacionPorActualizar,
+}: {
+  id: string;
+  observacionPorActualizar: string;
+}) {
+  const data = {
+    observaciones: observacionPorActualizar,
+  };
+
+  const record = await pb.collection("calificaciones").update(id, data);
+  return record;
+}
 
 export default function AsistenciaPage() {
   const queryClient = useQueryClient();
@@ -34,6 +48,13 @@ export default function AsistenciaPage() {
     mutationFn: actualizarCalificacion,
     onSuccess: () => {
       // Invalidate and refetch, en este caso las calificaciones
+      queryClient.invalidateQueries({ queryKey: ["calificaciones"] });
+    },
+  });
+
+  const mutacionParaActualizarObservacionDeUnEstudiante = useMutation({
+    mutationFn: actualizarObservacion,
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["calificaciones"] });
     },
   });
@@ -51,6 +72,7 @@ export default function AsistenciaPage() {
     });
     return records;
   }
+
 
   const query = useQuery({
     queryKey: ["calificaciones"],
@@ -159,16 +181,28 @@ export default function AsistenciaPage() {
                         value={student.calificacion || ""}
                         onChange={(e) =>
                           mutacionParaActualizarCalificacionDeUnEstudiante.mutate({
-                            id: student.id, 
-                            calificacionPorActualizar: e.target.value, 
+                            id: student.id,
+                            calificacionPorActualizar: e.target.value,
                           })
                         }
                         placeholder="Agregar calificación..."
                         className="w-full rounded-lg border border-gray-800 bg-white px-3 py-1 text-gray-800"
                       />
                     </td>
+
                     <td className="px-6 py-4">
-                      {/* Aquí también puedes incluir la lógica de observaciones si es necesario */}
+                      <input
+                        type="text"
+                        defaultValue={student.observaciones || ""}
+                        onBlur={(e) =>
+                          mutacionParaActualizarObservacionDeUnEstudiante.mutate({
+                            id: student.id,
+                            observacionPorActualizar: e.target.value,
+                          })
+                        }
+                        placeholder="Escribir observación..."
+                        className="w-full rounded-lg border border-gray-800 bg-white px-3 py-1 text-gray-800"
+                      />
                     </td>
                   </tr>
                 ))}
