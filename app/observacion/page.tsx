@@ -9,16 +9,19 @@ export default function ObservacionesPage() {
   const [alumno, setAlumno] = useState("");
   const [texto, setTexto] = useState("");
 
-  // Cargar estudiantes y observaciones
   const cargarDatos = async () => {
-    const est = await pb.collection("estudiantes").getFullList();
-    setEstudiantes(est);
+    try {
+      const est = await pb.collection("estudiantes").getFullList();
+      setEstudiantes(est);
 
-    const obs = await pb.collection("observaciones").getFullList({
-      sort: "-created",
-    });
+      const obs = await pb.collection("observaciones").getFullList({
+        sort: "-created",
+      });
 
-    setObservaciones(obs);
+      setObservaciones(obs);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -31,22 +34,24 @@ export default function ObservacionesPage() {
       return;
     }
 
-    await pb.collection("observaciones").create({
-      alumno: alumno,
-      observacion_personalizada: texto,
-      fecha: new Date().toISOString(),
-    });
+    const estudianteSeleccionado = estudiantes.find(
+      (e) => e.id === alumno
+    );
 
-    setTexto("");
-    setAlumno("");
+    try {
+      await pb.collection("observaciones").create({
+        alumno: estudianteSeleccionado?.nombre, // ✅ guarda el nombre en PocketBase
+        observacion_personalizada: texto,
+        fecha: new Date().toISOString(),
+      });
 
-    await cargarDatos();
-  };
+      setTexto("");
+      setAlumno("");
 
-  // Función para obtener nombre del alumno sin usar expand
-  const obtenerNombreAlumno = (id: string) => {
-    const encontrado = estudiantes.find((e) => e.id === id);
-    return encontrado ? encontrado.nombre : "Alumno no encontrado";
+      await cargarDatos();
+    } catch (error) {
+      console.error("Error guardando observación:", error);
+    }
   };
 
   return (
@@ -54,7 +59,10 @@ export default function ObservacionesPage() {
       <h1>Observaciones</h1>
 
       <div style={{ marginBottom: 20 }}>
-        <select value={alumno} onChange={(e) => setAlumno(e.target.value)}>
+        <select
+          value={alumno}
+          onChange={(e) => setAlumno(e.target.value)}
+        >
           <option value="">Seleccionar alumno</option>
           {estudiantes.map((e) => (
             <option key={e.id} value={e.id}>
@@ -87,9 +95,18 @@ export default function ObservacionesPage() {
             marginTop: 10,
           }}
         >
-          <p><strong>Alumno:</strong> {obtenerNombreAlumno(obs.alumno)}</p>
-          <p><strong>Observación:</strong> {obs.observacion_personalizada}</p>
-          <p><strong>Fecha:</strong> {new Date(obs.fecha).toLocaleDateString()}</p>
+          <p>
+            <strong>Alumno:</strong> {obs.alumno}
+          </p>
+
+          <p>
+            <strong>Observación:</strong> {obs.observacion_personalizada}
+          </p>
+
+          <p>
+            <strong>Fecha:</strong>{" "}
+            {new Date(obs.fecha).toLocaleDateString()}
+          </p>
         </div>
       ))}
     </div>
